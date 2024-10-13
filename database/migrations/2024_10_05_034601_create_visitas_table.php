@@ -14,6 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('visitas', function (Blueprint $table) {
+            $table->id(); // Crea la columna 'id' automáticamente
             $table->integer('ID_Visita', true);
             $table->integer('ID_Visitante')->nullable()->index('ID_Visitante');
             $table->dateTime('Fecha_Hora_Entrada');
