@@ -1,35 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<style>
-    body, html {
-        height: 100%; /* Asegura que el body y html ocupe toda la altura */
-        margin: 0; /* Elimina márgenes */
-    }
-
-    .login-background {
-        background-image: url('/images/nelson.jpg'); /* Ruta de la imagen */
-        background-size: cover; /* Ajusta la imagen al tamaño del div */
-        background-position: center; /* Centra la imagen */
-        height: 100vh; /* Altura del viewport */
-        display: flex; /* Para centrar el contenido */
-        align-items: center; /* Centrar verticalmente */
-        justify-content: center; /* Centrar horizontalmente */
-        position: relative; /* Necesario para z-index */
-        z-index: 1; /* Asegura que esté detrás del contenido */
-    }
-
-    .container {
-        background: transparent;
-        position: relative; /* Necesario para que el z-index funcione */
-        z-index: 2; /* Asegura que el contenido esté por encima del fondo */
-        background: rgba(255, 255, 255, 0.8); /* Fondo blanco con opacidad */
-        border-radius: 10px; /* Bordes redondeados */
-        padding: 20px; /* Espaciado interno */
-    }
-</style>
-
-
 <div class="login-background">
     <div class="container">
         <div class="row justify-content-center">
@@ -42,7 +13,7 @@
                             @csrf
 
                             <div class="row mb-3">
-                                <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Direccion de correo') }}</label>
+                                <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Dirección de correo') }}</label>
 
                                 <div class="col-md-6">
                                     <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
@@ -84,7 +55,7 @@
                             <div class="row mb-0">
                                 <div class="col-md-8 offset-md-4">
                                     <button type="submit" class="btn btn-primary">
-                                        {{ __('Iniciar sesion') }}
+                                        {{ __('Iniciar sesión') }}
                                     </button>
 
                                     @if (Route::has('password.request'))

@@ -1,4 +1,32 @@
 <!doctype html>
+
+<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+    }
+
+    .login-background {        
+        background-image: url('{{ asset('img/nelson.jpg') }}');
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    .container {
+        background: rgba(255, 255, 255, 0);
+        border-radius: 10px;
+        padding: 20px;
+        position: relative;
+        z-index: 1;
+    }
+</style>
+
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">

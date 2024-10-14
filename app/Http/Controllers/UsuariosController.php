@@ -2,38 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\usuarios;
+use App\Models\Usuarios;
 use Illuminate\Http\Request;
 
 class UsuariosController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $usuarios = Usuarios::all();
-        return view('usuarios.show')->with(['usuarios' => $usuarios]);
+        return view('usuarios.show', compact('usuarios'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('usuarios.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -43,46 +27,25 @@ class UsuariosController extends Controller
         ]);
 
         try {
-            Usuarios::create($data);
-            return redirect('/usuarios/show')->with('success', 'Usuario creado con éxito');
+            $usuario = Usuarios::create($data);
+            return redirect()->route('usuarios.show', $usuario->id_usuario)->with('success', 'Usuario creado con éxito');
         } catch (\Exception $e) {
-            return redirect('/usuarios/create')->with('error', 'Error al crear Usuarios: ' . $e->getMessage());
+            return redirect('/usuarios/create')->with('error', 'Error al crear Usuario: ' . $e->getMessage());
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $usuario = Usuarios::findOrFail($id);
-        return view('usuarios.showDetail')->with(['usuario' => $usuario]);
-
+        return view('usuarios.showDetail', compact('usuario'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $usuario = Usuarios::findOrFail($id);
-        return view('usuarios.update', ['usuario' => $usuario]);
-
+        return view('usuarios.update', compact('usuario'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $data = $request->validate([
@@ -93,23 +56,16 @@ class UsuariosController extends Controller
 
         $usuario = Usuarios::findOrFail($id);
         $usuario->update($data);
-        return redirect('/usuarios/show')->with('success', 'Usuario actualizado con éxito');
-
+        return redirect()->route('usuarios.show', $usuario->id_usuario)->with('success', 'Usuario actualizado con éxito');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         try {
             Usuarios::destroy($id);
-            return response()->json(['res' => true]);
+            return redirect()->route('usuarios.index')->with('success', 'Usuario eliminado con éxito');
         } catch (\Exception $e) {
-            return response()->json(['res' => false, 'message' => $e->getMessage()]);
+            return redirect()->route('usuarios.index')->with('error', 'Error al eliminar Usuario: ' . $e->getMessage());
         }
     }
 

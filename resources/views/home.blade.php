@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="container mt-5">
     <div class="jumbotron text-center">
         <h1 class="display-4">Bienvenido al Sistema de Registro de Visitas</h1>

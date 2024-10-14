@@ -1,39 +1,42 @@
 @extends('layout.app')
 
-@section('title', 'Crear Visitante')
+@section('title', 'Lista de Visitantes')
 
 @section('content')
 
-
 <div class="container mt-5">
-    <h1 class="text-center">Detalles de la Visita</h1>
+    <h1 class="text-center">Lista de Visitantes</h1>
+    <a class="btn btn-danger btn-sm" href="/visitantes/create">Agregar nuevo visitante</a>
+    <br> <br>
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>ID Visitntes</th>             
+                <th>ID Visitante</th>             
                 <th>Nombre</th>
-                <th>Documento_ID</th>
-                <th>Telefono</th>
+                <th>Documento ID</th>
+                <th>Teléfono</th>
                 <th>Correo</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
+            @foreach($visitantes as $visitante)
             <tr>
-                <td>1</td>
-                <td>Julissa</td>
-                <td>12345678-0</td>
-                <td>70314246</td>
-                <td>julissaqgmail.com</td>
+                <td>{{ $visitante->id_visitante }}</td>
+                <td>{{ $visitante->nombre }}</td>
+                <td>{{ $visitante->documento_id }}</td>
+                <td>{{ $visitante->telefono }}</td>
+                <td>{{ $visitante->correo }}</td>
                 <td>
-                    <a href="/visitantes/edit/1" class="btn btn-warning btn-sm">Editar</a>
-                    <form action="/visitantes/delete/1" method="POST" style="display:inline;">
+                    <a href="{{ route('visitantes.edit', $visitante->id_visitante) }}" class="btn btn-warning btn-sm">Editar</a>
+                    <form action="{{ route('visitantes.destroy', $visitante->id_visitante) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                     </form>
                 </td>
             </tr>
-            <!-- Puedes agregar más filas aquí -->
+            @endforeach
         </tbody>
     </table>
 </div>

@@ -66,12 +66,12 @@ class VisitasController extends Controller
 
     public function destroy($id)
     {
-        try {
-            Visitas::destroy($id);
-            return response()->json(['res' => true]);
-        } catch (\Exception $e) {
-            return response()->json(['res' => false, 'message' => $e->getMessage()]);
-        }
+         
+        // Eliminar el producto con el id recibido
+       Visitas::destroy($id); 
+        // Retornar una respuesta json return
+        response()->json(array('res'=>true)); 
+
     }
 
     public function __construct() 
