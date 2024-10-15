@@ -22,8 +22,13 @@
         </div>
         <div class="form-group">
             <label for="rol">Rol</label>
-            <input type="text" class="form-control" id="rol" name="rol" value="{{ $usuario->rol }}" required>
+            <select name="rol" id="rol" class="form-control">
+                <option value="administrativo" {{ $usuario->rol == 'administrativo' ? 'selected' : '' }}>Administrativo</option>
+                <option value="encargado" {{ $usuario->rol == 'encargado' ? 'selected' : '' }}>Encargado</option>
+                <option value="otro" {{ $usuario->rol == 'otro' ? 'selected' : '' }}>Otro</option>
+            </select>
         </div>
+        
         <div class="form-group">
             <label for="correo">Correo Electrónico</label>
             <input type="email" class="form-control" id="correo" name="correo" value="{{ $usuario->correo }}" required>

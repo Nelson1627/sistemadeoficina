@@ -1,122 +1,81 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\tramites;
+
+use App\Models\Tramites;
+use App\Models\Usuarios;
+use App\Models\Visitas;
 use Illuminate\Http\Request;
 
 class TramitesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $tramites =tramites::all();
-        return view('tramites.show')->with(['tramites' => $tramites]);
+        $tramites = Tramites::all(); // Recupera todos los trámites
+        return view('tramites.show')->with(['tramites' => $tramites]); // Cambia a la vista de índice
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function show($id_tramite)
+    {
+        $tramite = Tramites::findOrFail($id_tramite);
+        return view('tramites.showDetail', compact('tramite')); // Vista de detalle
+    }
+
     public function create()
     {
-        return view('tramites.create');
+        $usuarios = Usuarios::all();
+        $visitas = Visitas::all();
+        return view('tramites.create', compact('usuarios', 'visitas')); // Vista para crear trámite
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $data = $request->validate([
-            'id_visita' => 'required',
-            'id_usuario' => 'required',
-            'descripcion' => 'required',
-            'estado' => 'required',
-            'fecha_creacion' => 'required|date'
+            'id_visita' => 'required|exists:visitas,id_visita',
+            'id_usuario' => 'required|exists:usuarios,id_usuario',
+            'descripcion' => 'required|string',
+            'estado' => 'required|string|in:Pendiente,En Proceso,Finalizado',
+            'fecha_creacion' => 'required|date',
         ]);
 
-        try {
-           tramites::create($data);
-            return redirect('/tramites/show')->with('success', 'Trámite creado con éxito');
-        } catch (\Exception $e) {
-            return redirect('/tramites/create')->with('error', 'Error al crear trámite: ' . $e->getMessage());
-        }
+        Tramites::create($data); // Crear nuevo trámite
+        return redirect()->route('tramites.index')->with('success', 'Trámite creado exitosamente.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $tramite =tramites::findOrFail($id);
-        return view('tramites.showDetail')->with(['tramite' => $tramite]);
-
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        $tramite =tramites::findOrFail($id);
-        return view('tramites.update', ['tramite' => $tramite]);
+        $tramite = Tramites::findOrFail($id);
+        $usuarios = Usuarios::all();
+        $visitas = Visitas::all();
+
+        return view('tramites.update', compact('tramite', 'usuarios', 'visitas')); // Vista para editar
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
+        $tramite = Tramites::findOrFail($id);
+
         $data = $request->validate([
-            'id_visita' => 'required',
-            'id_usuario' => 'required',
-            'descripcion' => 'required',
-            'estado' => 'required',
-            'fecha_creacion' => 'required|date'
+            'id_visita' => 'required|exists:visitas,id_visita',
+            'id_usuario' => 'required|exists:usuarios,id_usuario',
+            'descripcion' => 'required|string',
+            'estado' => 'required|string|in:Pendiente,En Proceso,Finalizado',
+            'fecha_creacion' => 'required|date',
         ]);
 
-        $tramite =tramites::findOrFail($id);
-        $tramite->update($data);
-        return redirect('/tramites/show')->with('success', 'Trámite actualizado con éxito');
-
+        $tramite->update($data); // Actualizar el trámite
+        return redirect()->route('tramites.index')->with('success', 'Trámite actualizado exitosamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
+        $tramite = Tramites::findOrFail($id);
+        
         try {
-            tramites::destroy($id);
-             return response()->json(['res' => true]);
-         } catch (\Exception $e) {
-             return response()->json(['res' => false, 'message' => $e->getMessage()]);
-         }
-    }
-
-    public function __construct() 
-    { 
-        $this->middleware('auth'); 
+            $tramite->delete(); // Eliminar el trámite
+            return redirect()->route('tramites.index')->with('success', 'Trámite eliminado exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('tramites.index')->with('error', 'Error al eliminar el trámite.');
+        }
     }
 }

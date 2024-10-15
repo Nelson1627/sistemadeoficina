@@ -2,118 +2,88 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Informes; // Asegúrate de que el nombre del modelo sea correcto
 
-use App\Models\informes;
+use App\Models\Visitas;
+use App\Models\Usuarios;
 use Illuminate\Http\Request;
 
 class InformesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $informes = informes::all();
+        $informes = Informes::all();
         return view('informes.show')->with(['informes' => $informes]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        return view('informes.create');
+        $visitas =Visitas::all(); // Asegúrate de que el modelo Visitas esté importado
+        $usuarios = Usuarios::all(); // Asegúrate de que el modelo Usuarios esté importado
+        return view('informes.create', compact('visitas', 'usuarios'));
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    
     public function store(Request $request)
-    {
-        $data = $request->validate([
-            'id_visita' => 'required',
-            'id_usuario' => 'required',
-            'fecha_informe' => 'required|date',
-            'contenido' => 'required'
-        ]);
+{
+    $data = $request->validate([
+        'id_visita' => 'nullable|integer',
+        'id_usuario' => 'nullable|integer',
+        'fecha_informe' => 'required|date',
+        'contenido' => 'nullable|string'
+    ]);
 
-        try {
-            informes::create($data);
-            return redirect('/informes/show')->with('success', 'Informe creado con éxito');
-        } catch (\Exception $e) {
-            return redirect('/informes/create')->with('error', 'Error al crear informes: ' . $e->getMessage());
-        }
+    try {
+        // Asegúrate de que la fecha se guarde correctamente
+        $data['fecha_informe'] = $request->input('fecha_informe');
+        Informes::create($data);
+        return redirect()->route('informes.index')->with('success', 'Informe creado con éxito');
+    } catch (\Exception $e) {
+        return redirect()->route('informes.create')->with('error', 'Error al crear informes: ' . $e->getMessage());
     }
+}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        $informe = informes::findOrFail($id);
+        $informe = Informes::findOrFail($id);
         return view('informes.showDetail')->with(['informe' => $informe]);
-
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        $informe = informes::findOrFail($id);
-        return view('informes.update', ['informe' => $informe]);
-
+        // Busca el informe por su ID
+        $informe = Informes::findOrFail($id);
+        
+        // Carga todas las visitas y usuarios
+        $visitas = Visitas::all(); // Asegúrate de tener el modelo Visitas importado
+        $usuarios = Usuarios::all(); // Asegúrate de tener el modelo Usuarios importado
+        
+        // Retorna la vista de edición con las variables necesarias
+        return view('informes.update', compact('informe', 'visitas', 'usuarios'));
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function update(Request $request, $id)
-    {
-        $data = $request->validate([
-            'id_visita' => 'required',
-            'id_usuario' => 'required',
-            'fecha_informe' => 'required|date',
-            'contenido' => 'required'
-        ]);
+{
+    $data = $request->validate([
+        'id_visita' => 'nullable|integer',
+        'id_usuario' => 'nullable|integer',
+        'fecha_informe' => 'required|date',
+        'contenido' => 'nullable|string'
+    ]);
 
-        $informe = informes::findOrFail($id);
-        $informe->update($data);
-        return redirect('/informes/show')->with('success', 'Informe actualizado con éxito');
+    $informe = Informes::findOrFail($id);
+    $informe->update($data);
+    return redirect()->route('informes.index')->with('success', 'Informe actualizado con éxito');
+}
 
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         try {
-            informes::destroy($id);
-            return response()->json(['res' => true]);
+            Informes::destroy($id);
+            return redirect()->route('informes.index');
         } catch (\Exception $e) {
             return response()->json(['res' => false, 'message' => $e->getMessage()]);
-        }
+        }       
+          
     }
 
     public function __construct() 

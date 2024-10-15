@@ -14,7 +14,12 @@
         </div>
         <div class="form-group">
             <label for="rol">Rol</label>
-            <input type="text" class="form-control" name="rol" id="rol" required>
+            <select class="form-control" name="rol" id="rol" required>
+                <option value="">Selecciona un rol</option>
+                @foreach($roles as $rol)
+                    <option value="{{ $rol }}">{{ ucfirst($rol) }}</option>
+                @endforeach
+            </select>
         </div>
         <div class="form-group">
             <label for="correo">Correo</label>

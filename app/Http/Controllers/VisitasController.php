@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Visitantes;
 use Illuminate\Http\Request;
 use App\Models\Visitas;
 
@@ -14,17 +15,19 @@ class VisitasController extends Controller
     }
 
     public function create()
-    {
-        return view('visitas.create');
-    }
+{
+    $visitantes = Visitantes::all(); // Asegúrate de tener el modelo correcto
+    return view('visitas.create', compact('visitantes'));
+}
+
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'id_visitante' => 'required',
+            'id_visitante' => 'required|integer', // Asegúrate de que sea un entero
             'fecha_hora_entrada' => 'required|date',
             'fecha_hora_salida' => 'nullable|date',
-            'proposito' => 'required'
+            'proposito' => 'required|string' // Asegúrate de que sea una cadena
         ]);
     
         try {
@@ -34,44 +37,42 @@ class VisitasController extends Controller
             return redirect()->route('visitas.create')->with('error', 'Error al crear visita: ' . $e->getMessage());
         }
     }
-    
 
     public function show($id)
     {
-        $visitas = Visitas::findOrFail($id);
-        return view('visitas.showDetail')->with(['visita' => $visitas]);
+        $visita = Visitas::findOrFail($id);
+        return view('visitas.showDetail')->with(['visita' => $visita]);
     }
 
     public function edit($id)
     {
-        $visitas = Visitas::findOrFail($id);
-        return view('visitas.update', ['visita' => $visitas]);
+        $visita = Visitas::findOrFail($id);
+        return view('visitas.update', ['visita' => $visita]);
     }
 
     public function update(Request $request, $id)
     {
         $data = $request->validate([
-            'id_visitante' => 'required',
+            'id_visitante' => 'required|integer', // Asegúrate de que sea un entero
             'fecha_hora_entrada' => 'required|date',
             'fecha_hora_salida' => 'nullable|date',
-            'proposito' => 'required'
+            'proposito' => 'required|string' // Asegúrate de que sea una cadena
         ]);
     
-        $visitas = Visitas::findOrFail($id);
-        $visitas->update($data);
+        $visita = Visitas::findOrFail($id);
+        $visita->update($data);
     
         return redirect()->route('visitas.index')->with('success', 'Visita actualizada con éxito');
     }
-    
 
     public function destroy($id)
     {
-         
-        // Eliminar el producto con el id recibido
-       Visitas::destroy($id); 
-        // Retornar una respuesta json return
-        response()->json(array('res'=>true)); 
-
+        try {
+            Visitas::destroy($id);
+            return redirect()->route('visitas.index')->with('success', 'Visita eliminada con éxito');
+        } catch (\Exception $e) {
+            return response()->json(['res' => false, 'message' => $e->getMessage()]);
+        }
     }
 
     public function __construct() 

@@ -6,31 +6,43 @@
 
 <div class="container mt-5">
     <h1 class="text-center">Modificar Informe</h1>
-    <h5 class="text-center">Formulario para actualizar datos del informe</h5>
-    <hr>
-    <form action="/informes/update" method="POST">
+    <form action="{{ route('informes.update', $informe->id_informe) }}" method="POST">
         @csrf
         @method('PUT')
         
         <div class="form-group">
             <label for="id_informe">ID Informe</label>
-            <input type="text" class="form-control" id="id_informe" name="id_informe" required readonly>
+            <input type="text" class="form-control" id="id_informe" name="id_informe" value="{{ $informe->id_informe }}" readonly>
         </div>
         <div class="form-group">
-            <label for="id_visita">ID Visita</label>
-            <input type="text" class="form-control" id="id_visita" name="id_visita" required>
+            <label for="id_visita">Seleccionar Visita</label>
+            <select class="form-control" name="id_visita" id="id_visita" required>
+                <option value="">Seleccione una visita</option>
+                @foreach($visitas as $visita)
+                    <option value="{{ $visita->id_visita }}" {{ $visita->id_visita == $informe->id_visita ? 'selected' : '' }}>
+                        {{ $visita->descripcion }}
+                    </option>
+                @endforeach
+            </select>
         </div>
         <div class="form-group">
-            <label for="id_usuario">ID Usuario</label>
-            <input type="text" class="form-control" id="id_usuario" name="id_usuario" required>
+            <label for="id_usuario">Seleccionar Usuario</label>
+            <select class="form-control" name="id_usuario" id="id_usuario" required>
+                <option value="">Seleccione un usuario</option>
+                @foreach($usuarios as $usuario)
+                    <option value="{{ $usuario->id_usuario }}" {{ $usuario->id_usuario == $informe->id_usuario ? 'selected' : '' }}>
+                        {{ $usuario->nombre }}
+                    </option>
+                @endforeach
+            </select>
         </div>
         <div class="form-group">
             <label for="fecha_informe">Fecha del Informe</label>
-            <input type="date" class="form-control" id="fecha_informe" name="fecha_informe" required>
+            <input type="datetime-local" class="form-control" id="fecha_informe" name="fecha_informe" value="{{ \Carbon\Carbon::parse($informe->fecha_informe)->format('Y-m-d\TH:i') }}" required>
         </div>
         <div class="form-group">
             <label for="contenido">Contenido</label>
-            <textarea class="form-control" id="contenido" name="contenido" required></textarea>
+            <textarea class="form-control" id="contenido" name="contenido" required>{{ $informe->contenido }}</textarea>
         </div>
         <div class="form-group">
             <button class="btn btn-success btn-block">Actualizar</button>
