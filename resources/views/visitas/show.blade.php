@@ -31,11 +31,11 @@
                     <td>{{ $visita->fecha_hora_salida ?? 'N/A' }}</td>
                     <td>{{ $visita->proposito }}</td>
                     <td>
-                        <a href="{{ route('visitas.edit', $visita->id_visita) }}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="{{ route('visitas.edit', $visita->id_visita) }}" class="btn btn-outline-warning">Editar</a>
                         <form action="{{ route('visitas.destroy', $visita->id_visita) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar esta visita?');">Eliminar</button>
+                            <button type="submit" class="btn btn-outline-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar esta visita?');">Eliminar</button>
                         </form>
                     </td>
                 </tr>

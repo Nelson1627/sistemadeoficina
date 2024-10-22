@@ -32,11 +32,11 @@
                     <td>{{ \Carbon\Carbon::parse($informe->fecha_informe)->format('d/m/Y H:i') }}</td>
                     <td>{{ $informe->contenido }}</td>
                     <td>
-                        <a href="{{ route('informes.edit', $informe->id_informe) }}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="{{ route('informes.edit', $informe->id_informe) }}" class="btn btn-outline-warning">Editar</a>
                         <form action="{{ route('informes.destroy', $informe->id_informe) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar este informe?');">Eliminar</button>
+                            <button type="submit" class="btn btn-outline-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este informe?');">Eliminar</button>
                         </form>
                     </td>
                 </tr>

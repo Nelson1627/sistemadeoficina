@@ -33,11 +33,11 @@
                     <td>{{ $tramite->estado }}</td>
                     <td>{{ \Carbon\Carbon::parse($tramite->fecha_creacion)->format('d/m/Y H:i') }}</td>
                     <td>
-                        <a href="{{ route('tramites.edit', $tramite->id_tramite) }}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="{{ route('tramites.edit', $tramite->id_tramite) }}" class="btn btn-outline-warning">Editar</a>
                         <form action="{{ route('tramites.destroy', $tramite->id_tramite) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar este trámite?');">Eliminar</button>
+                            <button type="submit" class="btn btn-outline-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este trámite?');">Eliminar</button>
                         </form>
                     </td>
                 </tr>

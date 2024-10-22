@@ -31,11 +31,11 @@
                     <td>{{ $visitante->telefono }}</td>
                     <td>{{ $visitante->correo }}</td>
                     <td>
-                        <a href="{{ route('visitantes.edit', $visitante->id_visitante) }}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="{{ route('visitantes.edit', $visitante->id_visitante) }}" class="btn btn-outline-warning">Editar</a>
                         <form action="{{ route('visitantes.destroy', $visitante->id_visitante) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar este visitante?');">Eliminar</button>
+                            <button type="submit" class="btn btn-outline-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este visitante?');">Eliminar</button>
                         </form>
                     </td>
                 </tr>

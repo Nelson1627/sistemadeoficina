@@ -48,11 +48,11 @@
                     <td>{{ $usuario->rol }}</td>
                     <td>{{ $usuario->correo }}</td>
                     <td>
-                        <a href="{{ route('usuarios.edit', $usuario->id_usuario) }}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="{{ route('usuarios.edit', $usuario->id_usuario) }}" class="btn btn-outline-warning">Editar</a>
                         <form action="{{ route('usuarios.destroy', $usuario->id_usuario) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">Eliminar</button>
+                            <button type="submit"class="btn btn-outline-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">Eliminar</button>
                         </form>
                     </td>
                 </tr>
